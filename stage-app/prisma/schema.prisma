@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Stats {
+  id             Int      @id @default(autoincrement())
+  body           Int      @default(0)
+  mind           Int      @default(0)
+  art            Int      @default(0)
+  knowledge      Int      @default(0)
+  bond           Int      @default(0)
+  spotlight      Int      @default(0)
+  bodyLevel      Int      @default(1) @map("body_level")
+  mindLevel      Int      @default(1) @map("mind_level")
+  artLevel       Int      @default(1) @map("art_level")
+  knowledgeLevel Int      @default(1) @map("knowledge_level")
+  bondLevel      Int      @default(1) @map("bond_level")
+  updatedAt      DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("stats")
+}
+
+model StatHistory {
+  id           Int      @id @default(autoincrement())
+  statName     String   @map("stat_name") @db.VarChar(20)
+  delta        Int
+  reason       String   @db.VarChar(50)
+  valueAfter   Int      @map("value_after")
+  recordedDate DateTime @map("recorded_date") @db.Date
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([recordedDate], name: "idx_stat_history_date")
+  @@index([statName, recordedDate], name: "idx_stat_history_name")
+  @@map("stat_history")
+}
+
+model Quest {
+  id              Int               @id @default(autoincrement())
+  questId         String            @unique @map("quest_id") @db.VarChar(20)
+  title           String            @db.VarChar(100)
+  type            String            @db.VarChar(10)
+  emoji           String?           @db.VarChar(10)
+  description     String?           @db.Text
+  statReward      Json?             @map("stat_reward") @db.JsonB
+  unlockCondition Json?             @map("unlock_condition") @db.JsonB
+  totalSteps      Int               @default(1) @map("total_steps")
+  isActive        Boolean           @default(true) @map("is_active")
+  createdAt       DateTime          @default(now()) @map("created_at")
+  completions     QuestCompletion[]
+
+  @@map("quests")
+}
+
+model QuestCompletion {
+  id            Int      @id @default(autoincrement())
+  questId       String   @map("quest_id") @db.VarChar(20)
+  completedDate DateTime @map("completed_date") @db.Date
+  choice        String?  @db.VarChar(10)
+  rewardsGiven  Json?    @map("rewards_given") @db.JsonB
+  createdAt     DateTime @default(now()) @map("created_at")
+  quest         Quest    @relation(fields: [questId], references: [questId])
+
+  @@index([questId, completedDate], name: "idx_quest_date")
+  @@map("quest_completions")
+}
+
+model Streak {
+  id                Int       @id @default(autoincrement())
+  currentStreak     Int       @default(0) @map("current_streak")
+  longestStreak     Int       @default(0) @map("longest_streak")
+  lastCompletedDate DateTime? @map("last_completed_date") @db.Date
+  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  @@map("streaks")
+}
+
+model Flag {
+  id          Int           @id @default(autoincrement())
+  flagName    String        @unique @map("flag_name") @db.VarChar(50)
+  flagType    String        @map("flag_type") @db.VarChar(10)
+  valueString String?       @map("value_string") @db.VarChar(100)
+  valueInt    Int           @default(0) @map("value_int")
+  valueBool   Boolean       @default(false) @map("value_bool")
+  updatedAt   DateTime      @default(now()) @updatedAt @map("updated_at")
+  history     FlagHistory[]
+
+  @@index([flagName], name: "idx_flag_name")
+  @@map("flags")
+}
+
+model FlagHistory {
+  id        Int      @id @default(autoincrement())
+  flagName  String   @map("flag_name") @db.VarChar(50)
+  oldValue  String?  @map("old_value") @db.VarChar(100)
+  newValue  String?  @map("new_value") @db.VarChar(100)
+  reason    String?  @db.VarChar(200)
+  createdAt DateTime @default(now()) @map("created_at")
+  flag      Flag     @relation(fields: [flagName], references: [flagName])
+
+  @@map("flag_history")
+}
+
+model Title {
+  id          Int       @id @default(autoincrement())
+  titleId     String    @unique @map("title_id") @db.VarChar(30)
+  titleName   String    @map("title_name") @db.VarChar(50)
+  description String?   @db.VarChar(200)
+  condition   Json      @db.JsonB
+  unlocked    Boolean   @default(false)
+  unlockedAt  DateTime? @map("unlocked_at")
+
+  @@map("titles")
+}
+
+model ChatSession {
+  id          Int           @id @default(autoincrement())
+  sessionDate DateTime      @unique @map("session_date") @db.Date
+  createdAt   DateTime      @default(now()) @map("created_at")
+  messages    ChatMessage[]
+
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id        Int         @id @default(autoincrement())
+  sessionId Int         @map("session_id")
+  role      String      @db.VarChar(10)
+  content   String      @db.Text
+  createdAt DateTime    @default(now()) @map("created_at")
+  session   ChatSession @relation(fields: [sessionId], references: [id])
+
+  @@index([sessionId, createdAt], name: "idx_chat_session")
+  @@map("chat_messages")
+}
+
+model District {
+  id              Int       @id @default(autoincrement())
+  districtId      String    @unique @map("district_id") @db.VarChar(20)
+  name            String    @db.VarChar(50)
+  emoji           String?   @db.VarChar(10)
+  unlocked        Boolean   @default(false)
+  unlockCondition Json?     @map("unlock_condition") @db.JsonB
+  unlockedAt      DateTime? @map("unlocked_at")
+
+  @@map("districts")
+}

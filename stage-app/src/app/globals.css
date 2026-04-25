@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --dawn-gold: #F4D03F;
+  --sky-blue: #85C1E9;
+  --forest-green: #82C785;
+  --stage-red: #E74C3C;
+  --code-purple: #9B59B6;
+  --bond-pink: #F1948A;
+  --cream: #FFF8E7;
+  --charcoal: #2C3E50;
+}
+
+body {
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  background-color: var(--cream);
+  color: var(--charcoal);
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-pixel {
+  font-family: 'Galmuri11', monospace;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.pb-nav {
+  padding-bottom: 5rem;
+}
