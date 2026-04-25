@@ -6,12 +6,14 @@ export function StarMessage() {
   const starMessage = useGameStore((s) => s.starMessage);
 
   return (
-    <div className="p-4 bg-amber-50/80 rounded-xl border border-amber-200/50">
+    <div className="game-card p-3 bg-amber-50/90 border-amber-200 animate-slide-up">
       <div className="flex items-start gap-2">
-        <span className="text-2xl mt-0.5">⭐</span>
-        <div>
-          <p className="text-xs text-amber-600 font-bold mb-0.5">별이</p>
-          <p className="text-sm text-gray-700 leading-relaxed">{starMessage}</p>
+        <div className="animate-float">
+          <span className="text-3xl animate-twinkle inline-block">⭐</span>
+        </div>
+        <div className="flex-1">
+          <p className="text-[10px] text-amber-600 font-bold mb-0.5">별이</p>
+          <p className="text-xs text-gray-700 leading-relaxed">{starMessage}</p>
         </div>
       </div>
     </div>
