@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({
     success: true,
-    data: session?.messages.map((m) => ({
+    data: session?.messages.map((m: { id: number; role: string; content: string; createdAt: Date }) => ({
       id: m.id,
       role: m.role,
       content: m.content,

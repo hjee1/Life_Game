@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -154,7 +154,7 @@ async function main() {
         emoji: q.emoji,
         description: q.description,
         statReward: q.statReward,
-        unlockCondition: (q as Record<string, unknown>).unlockCondition ?? null,
+        unlockCondition: (q as Record<string, unknown>).unlockCondition ?? Prisma.JsonNull,
         totalSteps: q.totalSteps,
       },
     });
@@ -185,8 +185,8 @@ async function main() {
 
   // --- 구역 7종 ---
   const districts = [
-    { districtId: "dawn_street", name: "새벽 거리", emoji: "🌅", unlocked: true, unlockCondition: null },
-    { districtId: "forge_woods", name: "단련의 숲", emoji: "🌲", unlocked: true, unlockCondition: null },
+    { districtId: "dawn_street", name: "새벽 거리", emoji: "🌅", unlocked: true, unlockCondition: Prisma.JsonNull },
+    { districtId: "forge_woods", name: "단련의 숲", emoji: "🌲", unlocked: true, unlockCondition: Prisma.JsonNull },
     { districtId: "memory_harbor", name: "기억의 항구", emoji: "⚓", unlocked: false, unlockCondition: { requires: "mq-01" } },
     { districtId: "code_workshop", name: "코드 공방", emoji: "💻", unlocked: false, unlockCondition: { stat_min: { knowledge: 10 } } },
     { districtId: "spotlight_theatre", name: "스포트라이트 극장", emoji: "🎭", unlocked: false, unlockCondition: { stat_min: { art: 15 } } },
