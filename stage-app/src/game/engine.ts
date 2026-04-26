@@ -113,9 +113,9 @@ export class GameEngine {
     this.canvas.style.width = window.innerWidth + "px";
     this.canvas.style.height = window.innerHeight + "px";
 
-    // Calculate scale: fit ~15 tiles horizontally on screen
-    const targetTilesVisible = 15;
-    this.scale = Math.max(1, Math.floor((window.innerWidth * dpr) / (TILE_SIZE * targetTilesVisible)));
+    // Calculate scale: fit ~12 tiles horizontally (closer camera for detail)
+    const targetTilesVisible = 12;
+    this.scale = Math.max(2, Math.round((window.innerWidth * dpr) / (TILE_SIZE * targetTilesVisible)));
   }
 
   start() {
@@ -189,9 +189,9 @@ export class GameEngine {
       this.player.x = Math.max(0, Math.min(this.player.x, (MAP_COLS - 1) * TILE_SIZE));
       this.player.y = Math.max(0, Math.min(this.player.y, (MAP_ROWS - 1) * TILE_SIZE));
 
-      // Walk animation
+      // Walk animation (faster cycle for smoother movement)
       this.player.frameTimer += dt;
-      if (this.player.frameTimer > 0.2) {
+      if (this.player.frameTimer > 0.12) {
         this.player.frame++;
         this.player.frameTimer = 0;
       }
@@ -221,7 +221,7 @@ export class GameEngine {
     const tileX = Math.floor(this.player.x / TILE_SIZE);
     const tileY = Math.floor(this.player.y / TILE_SIZE);
     const tile = this.tileMap[tileY]?.[tileX];
-    return tile === 1 ? 1.3 : 1.0; // TILE_PATH = 1
+    return tile === 1 ? 1.5 : 1.0; // TILE_PATH = faster
   }
 
   canMoveTo(x: number, y: number, w: number, h: number): boolean {
@@ -286,9 +286,9 @@ export class GameEngine {
     const targetX = this.player.x * s - screenW / 2 + (TILE_SIZE * s) / 2;
     const targetY = this.player.y * s - screenH / 2 + (TILE_SIZE * s) / 2;
 
-    // Smooth follow
-    this.camera.x += (targetX - this.camera.x) * 0.1;
-    this.camera.y += (targetY - this.camera.y) * 0.1;
+    // Smooth follow (tighter tracking)
+    this.camera.x += (targetX - this.camera.x) * 0.15;
+    this.camera.y += (targetY - this.camera.y) * 0.15;
 
     // Clamp to world bounds
     const worldW = MAP_COLS * TILE_SIZE * s;

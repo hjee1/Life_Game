@@ -98,6 +98,6 @@ export interface EngineCallbacks {
 }
 
 export const TILE_SIZE = 16; // base tile size in pixels
-export const MAP_COLS = 50;
-export const MAP_ROWS = 40;
-export const PLAYER_SPEED = 1.5; // tiles per second
+export const MAP_COLS = 36;
+export const MAP_ROWS = 30;
+export const PLAYER_SPEED = 4.5; // tiles per second
