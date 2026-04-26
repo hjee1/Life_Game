@@ -35,7 +35,7 @@ export default function DashboardPage() {
     async function loadData() {
       const [statsRes, questsRes, streakRes] = await Promise.all([
         apiFetch<StatsResponse>("/api/stats"),
-        apiFetch<{ daily: Array<{ id: string; title: string; emoji: string; completedToday: boolean; statReward: { stat: StatName; delta: number } | null }> }>("/api/quests?type=daily"),
+        apiFetch<{ daily: Array<{ id: string; title: string; emoji: string; description: string; completedToday: boolean; statReward: { stat: StatName; delta: number } | null }> }>("/api/quests?type=daily"),
         apiFetch<{ current: number; longest: number; todayCompleted: number; todayTotal: number; lastCompletedAt: string | null }>("/api/streak"),
       ]);
 

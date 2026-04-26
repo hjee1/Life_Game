@@ -29,6 +29,7 @@ export async function GET(req: NextRequest) {
       id: q.questId,
       title: q.title,
       emoji: q.emoji,
+      description: q.description,
       completedToday: q.completions.length > 0,
       statReward: q.statReward,
     }));

@@ -106,15 +106,24 @@ export function QuestCheckList() {
           </div>
 
           <div className="flex-1 text-left">
-            <span className={`text-sm font-bold ${
-              quest.completedToday ? "text-green-600 line-through" : "text-gray-700"
-            }`}>
-              {quest.title}
-            </span>
-            {quest.statReward && (
-              <span className="text-[10px] ml-2 px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded">
-                {STAT_LABELS[quest.statReward.stat as StatName]?.hanja} +{quest.statReward.delta}
+            <div className="flex items-center gap-1.5">
+              <span className={`text-sm font-bold ${
+                quest.completedToday ? "text-green-600 line-through" : "text-gray-700"
+              }`}>
+                {quest.title}
               </span>
+              {quest.statReward && (
+                <span className="text-[10px] px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded">
+                  {STAT_LABELS[quest.statReward.stat as StatName]?.hanja} +{quest.statReward.delta}
+                </span>
+              )}
+            </div>
+            {quest.description && (
+              <p className={`text-[10px] mt-0.5 ${
+                quest.completedToday ? "text-green-500" : "text-gray-400"
+              }`}>
+                {quest.completedToday ? "✓ 완료!" : `→ ${quest.description}`}
+              </p>
             )}
           </div>
 
